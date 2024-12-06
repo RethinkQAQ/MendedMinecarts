@@ -11,26 +11,26 @@
     "AbstractRailBlockMixin",
     "BlocksMixin",
     "CommandManagerMixin",
-    "DataQueryHandlerMixin",
     "EntityShapeContextAccessor",
     "EntityTrackerEntryMixin",
     "HopperMinecartEntityMixin",
     "ItemStackMixin_ItemCap",
     "LavaCauldronBlockMixin_TNTCartDamage",
-    "MinecartEntityRendererMixin",
     "StorageMinecartEntityMixin_ItemCap",
     "TntMinecartEntityMixin",
     "boat.BoatEntityMixin",
     "placement.AbstractRailBlockMixin",
     "placement.DetectorRailBlockMixin",
-    "settings.ClientPlayNetworkHandlerMixin",
     "settings.CustomPayloadS2CPacketMixin",
     "settings.PlayerManagerMixin"
   ],
   "client": [
     "AbstractMinecartEntityMixin_Client",
     "ClientWorldMixin",
-    "WorldRendererMixin_Client"
+    "WorldRendererMixin_Client",
+    "MinecartEntityRendererMixin",
+    "settings.ClientPlayNetworkHandlerMixin",
+    "DataQueryHandlerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -5,7 +5,6 @@ import mendedminecarts.MendedMinecartsMod;
 import mendedminecarts.MinecartDisplayData;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.font.TextRenderer.TextLayerType;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
@@ -18,7 +17,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.joml.Matrix4f;
 
 import java.util.ArrayList;
 
@@ -62,7 +60,7 @@ public abstract class MinecartEntityRendererMixin<T extends AbstractMinecartEnti
                 matrices.push();
                 matrices.translate(0.0, f, 0.0);
                 matrices.multiply(this.dispatcher.getRotation());
-                matrices.scale(-0.025f, -0.025f, 0.025f);
+                matrices.scale(0.025f, -0.025f, 0.025f);  // sb mojang: -0.025f -> 0.025f
                 Matrix4f matrix4f = matrices.peek().getPositionMatrix();
                 float h = -textRenderer.getWidth(infoText) / 2f;
 

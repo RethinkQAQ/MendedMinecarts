@@ -2,19 +2,22 @@ package mendedminecarts;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.vehicle.*;
+import net.minecraft.entity.vehicle.AbstractMinecartEntity;
+import net.minecraft.entity.vehicle.FurnaceMinecartEntity;
+import net.minecraft.entity.vehicle.HopperMinecartEntity;
+import net.minecraft.entity.vehicle.StorageMinecartEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.shape.VoxelShape;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -40,7 +43,7 @@ public record MinecartDisplayData(Vec3d pos, Box boundingBox, Vec3d velocity, bo
 
         boolean onGround = nbt.getBoolean("OnGround");
 
-        int fillLevel = entity instanceof StorageMinecartEntity inventory ? getComparatorOutput(inventory, nbt) : -1;
+        int fillLevel = entity instanceof StorageMinecartEntity inventory ? getComparatorOutput(inventory, nbt,((StorageMinecartEntity) entity).getRegistryManager()) : -1;
 
         boolean hopperLocked = entity instanceof HopperMinecartEntity && !(nbt.contains("Enabled") && nbt.getBoolean("Enabled"));
         float wobble = ((AbstractMinecartEntity) entity).getDamageWobbleStrength();
@@ -59,9 +62,9 @@ public record MinecartDisplayData(Vec3d pos, Box boundingBox, Vec3d velocity, bo
         return new MinecartDisplayData(pos, boxAt, velocity, onGround, fillLevel, slowdown, estimatedDistance, hopperLocked, wobble, rideable, fuseTime, (AbstractMinecartEntity) entity);
     }
 
-    private static int getComparatorOutput(StorageMinecartEntity inventory, NbtCompound nbtCompound) {
+    private static int getComparatorOutput(StorageMinecartEntity inventory, NbtCompound nbtCompound,RegistryWrapper.WrapperLookup registryLookup) {
         DefaultedList<ItemStack> itemStacks = DefaultedList.ofSize(inventory.size(), ItemStack.EMPTY);
-        Inventories.readNbt(nbtCompound, itemStacks);
+        Inventories.readNbt(nbtCompound, itemStacks, registryLookup);
         int stacks = 0;
         float weight = 0.0f;
         for (ItemStack itemStack : itemStacks) {
@@ -287,8 +290,8 @@ public record MinecartDisplayData(Vec3d pos, Box boundingBox, Vec3d velocity, bo
         if (!(this.entity() instanceof HopperMinecartEntity hopper)) {
             return new Box[0];
         }
-        VoxelShape inputAreaShape = hopper.getInputAreaShape();
-        return inputAreaShape.getBoundingBoxes().stream().map(box -> box.offset(this.pos.x - 0.5, this.pos.y + 0.5 - 0.5, this.pos.z - 0.5)).toArray();
+        Box inputAreaShape = hopper.getInputAreaShape();
+        return new Box[] {inputAreaShape.offset(this.pos.x - 0.5, this.pos.y + 0.5 - 0.5, this.pos.z - 0.5) };
     }
 
     public Box hopperPickupArea2() {
