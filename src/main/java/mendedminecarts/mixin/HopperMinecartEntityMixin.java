@@ -18,7 +18,7 @@ public class HopperMinecartEntityMixin {
             method = "getDefaultContainedBlock", at = @At("RETURN"), cancellable = true
     )
     private void displayLockedHopperWhenLocked(CallbackInfoReturnable<BlockState> cir) {
-        if (MendedMinecartsMod.VISUAL_HOPPER_CART_LOCKING.isEnabled() && this instanceof AbstractMinecartEntityAccess entityAccess) {
+        if (((MendedMinecartsMod.VISUAL_HOPPER_CART_LOCKING.isEnabled()) && this instanceof AbstractMinecartEntityAccess entityAccess)) {
             MinecartDisplayData displayInfo = entityAccess.getDisplayInfo();
             if (displayInfo == null) {
                 return;
